@@ -22,7 +22,7 @@ const bodyParser = require('body-parser')
 
 const app = express();
 
-// app.use(bodyParser.urlencoded({ extended: true })); 
+// app.use(bodyParser.urlencoded({ extended: true }));
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
         cb(null, './uploads/')
@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 dotenv.config()
 // var upload = multer();
-
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -43,8 +43,8 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-// app.use(bodyParser.urlencoded({ extended: true })); 
-// app.use(upload.array()); 
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(upload.array());
 
 app.use('/api', authRoutes)
 app.use('/api/signature_request',signatureRoutes)
@@ -62,6 +62,6 @@ app.use('/getfile',getfile)
 
 
 
-app.listen(3700,()=>{
+app.listen(PORT,()=>{
     console.log('starting app')
 })
