@@ -1,7 +1,7 @@
 
 
 const router = require('express').Router()
-
+const bodyParser = require('body-parser')
 const axios = require('axios')
 const crypto = require('crypto')
 const fs = require('fs')
@@ -21,14 +21,14 @@ const upload = multer({ storage: storage })
 
 
 
-router.get('/', upload.single('files'),(req,res)=>{
+router.post('/', bodyParser.json(),(req,res)=>{
     console.log('hello')
     console.log(req.body)
     console.log(req.file)
     // Set current values
 const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2bbPf'
 const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
-const externalUserId = '123456'
+const externalUserId = '123456' || req.body.uID
 const ttlInSecs = '600'
 const appi = req.body.appid;
 console.log(appi)
