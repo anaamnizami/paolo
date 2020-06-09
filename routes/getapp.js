@@ -7,7 +7,7 @@ const router = express.Router();
 const app = express()
 
 console.log('hkj')
-router.post('/so',bodyParser.json(),(req,res)=>{
+router.post('/app',bodyParser.json(),(req,res)=>{
 console.log('sfkl')
     // Set current values
 const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2bbPf'
@@ -18,7 +18,7 @@ const ttlInSecs = '600'
 axios.defaults.baseURL = 'https://test-api.sumsub.com';
 // axios.defaults.headers.get['Authorization'] = 'application/json';
 
-        
+
 axios.interceptors.request.use(sign, function (error) {
   return Promise.reject(error);
 });
@@ -57,4 +57,4 @@ function requestAccessToken(externalUserId, ttlInSecs) {
 requestAccessToken(externalUserId, ttlInSecs)
 })
 
-module.exports = router; 
+module.exports = router;

@@ -31,17 +31,17 @@ const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
 const externalUserId = '123456'
 const ttlInSecs = '600'
 
-axios.defaults.baseURL = '/resources/applicants/5eda3a700a975a259dd2c4f5';
+axios.defaults.baseURL = 'https://test-api.sumsub.com';
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 axios.interceptors.request.use(sign, function (error) {
     return Promise.reject(error);
   });
-  
-  
+
+
   function sign(config) {
     let ts =  Math.round(Date.now() / 1000);
-  
+
     let hmacSha256 = crypto.createHmac('sha256', APP_TOKEN_SECRET)
     hmacSha256.update(ts + config.method.toUpperCase() + config.url)
     if (config.data) {
@@ -49,11 +49,11 @@ axios.interceptors.request.use(sign, function (error) {
         console.log(config.data)
       hmacSha256.update(buf)
   }
-  
+
     config.headers['X-App-Token'] = APP_TOKEN_KEY
     config.headers['X-App-Access-Ts'] = ts
     config.headers['X-App-Access-Sig'] = hmacSha256.digest('hex')
-  
+
     return config
   }
 //   var readable = fs.createReadStream(req.file);
@@ -64,7 +64,7 @@ var formData = {
   };
 function requestAccessToken(ttlInSecs) {
 
-  axios.get(`/status`,
+  axios.get('/resources/applicants/5ede63d60a975a6579ccea39/status',
  ).then(result => {
     console.log('result', result.data)
     res.send(result.data)
@@ -77,17 +77,4 @@ requestAccessToken(ttlInSecs)
 
 })
 
-module.exports = router; 
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = router;

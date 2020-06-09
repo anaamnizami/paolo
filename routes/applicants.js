@@ -64,7 +64,7 @@ obj= {
 	}
 }
 
-        
+
 axios.interceptors.request.use(sign, function (error) {
   return Promise.reject(error);
 });
@@ -90,7 +90,7 @@ function sign(config) {
 
 
 
-  
+
 function requestAccessToken(ttlInSecs) {
 
   axios.post(`/resources/applicants`,
@@ -100,7 +100,7 @@ function requestAccessToken(ttlInSecs) {
     res.send(result.data)
   }).catch(error => {
 	console.error(error)
-	res.send(err)
+	res.send(error)
   })
 }
 

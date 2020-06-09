@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 dotenv.config()
 // var upload = multer();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4300;
 
 
 
@@ -56,7 +56,7 @@ app.use('/api/bulk_send_job',bulk)
 app.use('/embedded',embedded)
 app.use('/unclaimed_draft',unclaimed_draft)
 app.use('/applicants', applicant)
-app.use('/getap',getapps)
+app.use('/getapp',getapps)
 app.use('/addinfo',addinfo)
 app.use('/getfile',getfile)
 
