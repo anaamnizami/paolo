@@ -30,6 +30,8 @@ const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2
 const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
 const externalUserId = '123456'
 const ttlInSecs = '600'
+const appi = req.body.appid;
+console.log(appi)
 
 axios.defaults.baseURL = 'https://test-api.sumsub.com';
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
@@ -62,9 +64,10 @@ var formData = {
     Data: req.body,
     file:  filex,
   };
+
 function requestAccessToken(ttlInSecs) {
 
-  axios.get('/resources/applicants/5ede63d60a975a6579ccea39/status',
+  axios.get(`/resources/applicants/${appi}/status`,
  ).then(result => {
     console.log('result', result.data)
     res.send(result.data)
