@@ -7,7 +7,8 @@ const hellosign = require('hellosign-sdk')({ key: '01907c62f628a5cdc66a48fb75446
 const team = require('./routes/team')
 // const app = require('express');
 const appapi = require('./routes/appapi')
-const addinfo = require('./routes/addfile')
+const payload = require('./routes/payload')
+const addfile = require('./routes/addfile')
 const getfile = require('./routes/getfile')
 const getapps = require('./routes/getapp')
  const applicant = require('./routes/applicants')
@@ -57,8 +58,10 @@ app.use('/embedded',embedded)
 app.use('/unclaimed_draft',unclaimed_draft)
 app.use('/applicants', applicant)
 app.use('/getapp',getapps)
-app.use('/addinfo',addinfo)
+// app.use('/addinfo',addinfo)
 app.use('/getfile',getfile)
+app.use('/addfile',addfile)
+app.use('/payload',payload)
 
 
 

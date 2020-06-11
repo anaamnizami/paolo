@@ -1,10 +1,11 @@
 const router = require('express').Router()
 
+const bodyParser = require('body-parser')
+var util = require('util');
 const axios = require('axios')
 const crypto = require('crypto')
 const fs = require('fs')
 const FormData = require('form-data')
-
 var multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -20,94 +21,66 @@ const upload = multer({ storage: storage })
 
 
 router.post('/', upload.single('files'),(req,res)=>{
-    console.log('hello')
-    console.log(req.body)
-    console.log(req.file)
-    // Set current values
-const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2bbPf'
-const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
-const externalUserId = '123456'
-const ttlInSecs = '600'
 
-axios.defaults.baseURL = '/resources/applicants/5eda3a700a975a259dd2c4f5';
-axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+  // Set current values
+  const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2bbPf'
+  const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
+  const applicantId = req.body.applicantId
+  const idDocType =  req.body.idDocType
+  const country = req.body.country
+  const filePath =  req.file
+  const externalUserId = req.body.externalUserId
+  const email = req.body.email
+  const ttlInSecs = '600'
+  axios.defaults.baseURL = 'https://test-api.sumsub.com';
+  axios.defaults.headers.post['Accept'] = 'application/json';
 
-axios.interceptors.request.use(sign, function (error) {
+console.log(req.file.filename)
+  axios.interceptors.request.use(sign, function (error) {
     return Promise.reject(error);
   });
-  
-  
+
   function sign(config) {
     let ts =  Math.round(Date.now() / 1000);
-  
+
     let hmacSha256 = crypto.createHmac('sha256', APP_TOKEN_SECRET)
     hmacSha256.update(ts + config.method.toUpperCase() + config.url)
     if (config.data) {
-      var buf = Buffer.from(JSON.stringify(config.data));
-        console.log(config.data)
-      hmacSha256.update(buf)
-  }
-  
+      hmacSha256.update(config.data.getBuffer())
+    }
+
     config.headers['X-App-Token'] = APP_TOKEN_KEY
     config.headers['X-App-Access-Ts'] = ts
     config.headers['X-App-Access-Sig'] = hmacSha256.digest('hex')
-  
+
+
+    console.log(config.data.getBuffer())
+
     return config
   }
-//   var readable = fs.createReadStream(req.file);
+  function uploadIdDoc(applicantId, idDocType, country, filePath) {
+    const form = new FormData();
 
+    form.append('metadata', JSON.stringify({idDocType, country}));
 
-const filex = req.file;
-var formData = {
-    Data: req.body,
-    file: filex,
-  };
-function requestAccessToken(ttlInSecs) {
+    // let fileParts = req.file.filename.split('.')
+    // const fileName = idDocType + '.' + fileParts[fileParts.length - 1]
+    // const content = fs.readFileSync(filePath)
+    // form.append('content', content, { filename : fileName})
 
-  axios.post(`/info/idDoc`,
- data = formData
- ).then(result => {
-    console.log('result', result.data)
-    res.send(result.data)
-  }).catch(error => {
-    console.error(error)
-    res.send(error)
-  })
-}
-requestAccessToken(ttlInSecs)
+    axios.post(`/resources/applicants/${applicantId}/info/idDoc`, form, {
+      headers: form.getHeaders()
+    }).then(result => {
+      console.log('result', res.data)
+      res.send(result.data)
+    }).catch(error => {
+      console.error(error)
+      res.send(error)
+    })
+  }
+
+  uploadIdDoc(applicantId, idDocType, country, filePath)
 
 })
 
-module.exports = router; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-// "requiredIdDocs": {
-//     "docSets": [{
-//             "idDocSetType": "IDENTITY",
-//             "types": [
-//                 "PASSPORT",
-//                 "ID_CARD",
-//                 "DRIVERS"
-//             ]
-//         }
-
-
-
-
-
-
-// 
+module.exports = router;

@@ -12,11 +12,11 @@ console.log('sfkl')
     // Set current values
 const APP_TOKEN_KEY = 'tst:9jpMMy4DKNv0IOvRormcaIWj.AozHQBYak4EE2DgNfxPVhoHvXkk2bbPf'
 const APP_TOKEN_SECRET = 'Kpg02sqLicREA8bOXCJeXqfXo9PCpkzW'
-const externalUserId = req.body.externalUserId
+const appId = req.body.appId
 const ttlInSecs = '600'
-
+console.log(appId)
 axios.defaults.baseURL = 'https://test-api.sumsub.com';
-// axios.defaults.headers.get['Authorization'] = 'application/json';
+axios.defaults.headers.get['Authorization'] = 'application/json';
 
 
 axios.interceptors.request.use(sign, function (error) {
@@ -42,9 +42,9 @@ function sign(config) {
 
 
 
-function requestAccessToken(externalUserId, ttlInSecs) {
+function requestAccessToken(appId, ttlInSecs) {
 
-  axios.get(`/resources/applicants/-;externalUserId=${externalUserId}&ttlInSecs=${ttlInSecs}`
+  axios.get(`/resources/applicants/${appId}`
   ).then(result => {
     console.log('result', result.data)
     res.send(result.data)
@@ -54,7 +54,7 @@ function requestAccessToken(externalUserId, ttlInSecs) {
   })
 }
 
-requestAccessToken(externalUserId, ttlInSecs)
+requestAccessToken(appId, ttlInSecs)
 })
 
 module.exports = router;
