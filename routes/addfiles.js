@@ -7,18 +7,19 @@ const crypto = require('crypto')
 const fs = require('fs')
 const FormData = require('form-data')
 var multer = require('multer');
+ const streamifier = require('streamifier');
+// const storage = multer.diskStorage({
+//     destination : function(req,file,cb){
+//         cb(null, './uploads/')
+//     },
+//     filename : function(req,file,cb){
+//         cb(null,file.originalname)
+//     }
+// })
+// const upload = multer({ storage: storage })
 
-const storage = multer.diskStorage({
-    destination : function(req,file,cb){
-        cb(null, './uploads/')
-    },
-    filename : function(req,file,cb){
-        cb(null,file.originalname)
-    }
-})
-const upload = multer({ storage: storage })
-
-
+var storage = multer.memoryStorage()
+var upload = multer({ storage: storage })
 
 router.post('/', upload.single('files'),(req,res)=>{
 
@@ -35,7 +36,7 @@ router.post('/', upload.single('files'),(req,res)=>{
   axios.defaults.baseURL = 'https://test-api.sumsub.com';
   axios.defaults.headers.post['Accept'] = 'application/json';
 
-console.log(req.file.filename)
+// console.log(req.file.filename)
   axios.interceptors.request.use(sign, function (error) {
     return Promise.reject(error);
   });
@@ -59,16 +60,16 @@ console.log(req.file.filename)
     return config
   }
 
-
+console.log(req.file)
 
   function uploadIdDoc(applicantId, idDocType, country, filePath) {
     const form = new FormData();
 
     form.append('metadata', JSON.stringify({idDocType, country}));
 
-    let fileParts = req.file.filename.split('.')
+    let fileParts = req.file.originalname.split('.')
     const fileName = idDocType + '.' + fileParts[fileParts.length - 1]
-    const content = fs.readFileSync(path.join(__dirname, '..', 'uploads', req.file.filename));
+    const content = req.file.buffer
     form.append('content', content, { filename : fileName})
 
     axios.post(`/resources/applicants/${applicantId}/info/idDoc`, form, {
