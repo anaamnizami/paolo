@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const path = require('path')
 const bodyParser = require('body-parser')
 var util = require('util');
 const axios = require('axios')
@@ -28,7 +28,7 @@ router.post('/', upload.single('files'),(req,res)=>{
   const applicantId = req.body.applicantId
   const idDocType =  req.body.idDocType
   const country = req.body.country
-  const filePath =  req.file
+  const filePath =  req.file.filename
   const externalUserId = req.body.externalUserId
   const email = req.body.email
   const ttlInSecs = '600'
@@ -58,20 +58,23 @@ console.log(req.file.filename)
 
     return config
   }
+
+
+
   function uploadIdDoc(applicantId, idDocType, country, filePath) {
     const form = new FormData();
 
     form.append('metadata', JSON.stringify({idDocType, country}));
 
-    // let fileParts = req.file.filename.split('.')
-    // const fileName = idDocType + '.' + fileParts[fileParts.length - 1]
-    // const content = fs.readFileSync(filePath)
-    // form.append('content', content, { filename : fileName})
+    let fileParts = req.file.filename.split('.')
+    const fileName = idDocType + '.' + fileParts[fileParts.length - 1]
+    const content = fs.readFileSync(path.join(__dirname, '..', 'uploads', req.file.filename));
+    form.append('content', content, { filename : fileName})
 
     axios.post(`/resources/applicants/${applicantId}/info/idDoc`, form, {
       headers: form.getHeaders()
     }).then(result => {
-      console.log('result', res.data)
+      console.log('result', result.data)
       res.send(result.data)
     }).catch(error => {
       console.error(error)

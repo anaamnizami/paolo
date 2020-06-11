@@ -8,7 +8,7 @@ const team = require('./routes/team')
 // const app = require('express');
 const appapi = require('./routes/appapi')
 const payload = require('./routes/payload')
-const addfile = require('./routes/addfile')
+const addfiles = require('./routes/addfiles')
 const getfile = require('./routes/getfile')
 const getapps = require('./routes/getapp')
  const applicant = require('./routes/applicants')
@@ -60,7 +60,7 @@ app.use('/applicants', applicant)
 app.use('/getapp',getapps)
 // app.use('/addinfo',addinfo)
 app.use('/getfile',getfile)
-app.use('/addfile',addfile)
+app.use('/addfiles',addfiles)
 app.use('/payload',payload)
 
 
